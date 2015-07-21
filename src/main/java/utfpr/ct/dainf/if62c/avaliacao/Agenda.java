@@ -71,6 +71,9 @@ public class Agenda {
     
     public void destroi() {
         for(Compromisso c : compromissos){
+            for(Aviso a : c.getAvisos()){
+                a.cancel();
+            }
             c.getAvisos().clear();
         }
         compromissos.clear();
