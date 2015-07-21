@@ -1,8 +1,10 @@
 package utfpr.ct.dainf.if62c.avaliacao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
+import javafx.scene.chart.PieChart;
 
 /**
  * IF62C Fundamentos de Programação 2
@@ -37,22 +39,42 @@ public class Agenda {
     }
     
     public void novoAviso(Compromisso compromisso, int antecedencia) {
-
+        Date hora_atual = new Date();
+        Aviso a = new Aviso(compromisso);
+        compromisso.registraAviso(a);
+        hora_atual.setTime(System.currentTimeMillis());
+        long ant = compromisso.getData().getTime() - hora_atual.getTime() - (antecedencia * 1000);
+        timer.schedule(a,ant);
     }
     
     public void novoAviso(Compromisso compromisso, int antecedencia, int intervalo) {
-    
+        Date hora_atual = new Date();
+        Aviso a = new Aviso(compromisso);
+        compromisso.registraAviso(a);
+        hora_atual.setTime(System.currentTimeMillis());
+        long ant = compromisso.getData().getTime() - hora_atual.getTime() - (antecedencia * 1000);
+        long inter = intervalo * 1000;
+        timer.schedule(a,ant,inter);
     }
     
     public void cancela(Compromisso compromisso) {
-
+        for(Aviso a : compromisso.getAvisos()){
+            a.cancel();
+        }
+        this.compromissos.remove(compromisso);
     }
     
     public void cancela(Aviso aviso) {
-    
+        aviso.cancel();
+        aviso.compromisso.getAvisos().remove(aviso);
     }
     
     public void destroi() {
-    
+        for(Compromisso c : compromissos){
+            c.getAvisos().clear();
+        }
+        compromissos.clear();
+        timer.cancel();
+        
     }
 }

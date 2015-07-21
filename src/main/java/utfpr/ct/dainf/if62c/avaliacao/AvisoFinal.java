@@ -11,4 +11,13 @@ public class AvisoFinal extends Aviso {
         super(compromisso);
     }
     
+    @Override
+    public void run(){
+        String descr = compromisso.getDescricao();
+        System.out.println(descr + " começa agora");
+        for (Aviso c : compromisso.getAvisos()){
+            c.cancel();
+        }
+    }
+    
 }
